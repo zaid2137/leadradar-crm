@@ -1,0 +1,30 @@
+[
+  {
+    "id": "rep_1787041914",
+    "name": "Zaid",
+    "email": "zaidpgs000@gmail.com",
+    "role": "admin",
+    "pin": "1234"
+  },
+  {
+    "id": "rep_1787042900",
+    "name": "Iqraijaz",
+    "email": "ijaz40118@gmail.com",
+    "role": "rep",
+    "pin": "1234"
+  },
+  {
+    "id": "rep_1787044736",
+    "name": "Wardahkhan",
+    "email": "wardahk90@gmail.com",
+    "role": "rep",
+    "pin": "1234"
+  },
+  {
+    "id": "rep_1787051924",
+    "name": "Huma Saddique",
+    "email": "husaddique592@gmail.com",
+    "role": "rep",
+    "pin": "0011"
+  }
+]

@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>LeadRadar Pro — Agency Lead Generation & Team CRM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0D1321; --panel: #141B2E; --panel2: #182036; --border: #2A3550;
+    --gold: #C08A3E; --terracotta: #B84A3D; --teal: #3E8E7E; --violet: #8C7AE6; --green: #4FA57C;
+    --text: #EDEFF5; --muted: #8791A8; --muted2: #5A6484;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: radial-gradient(ellipse at 20% -10%, #17203A 0%, #0D1321 55%, #090D18 100%);
+    color: var(--text); font-family: 'Inter', system-ui, sans-serif; min-height: 100vh;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .display { font-family: 'Fraunces', serif; }
+  header {
+    border-bottom: 1px solid var(--border); padding: 12px 22px; display: flex;
+    align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+  .logo-mark { width: 34px; height: 34px; }
+  .brand-name { font-size: 19px; font-weight: 600; letter-spacing: 0.2px; }
+  .brand-sub { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--muted); letter-spacing: 0.3px; }
+  
+  .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  
+  /* User Badge */
+  .user-badge {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 11px; display: flex; align-items: center; gap: 8px; font-size: 12px;
+  }
+  .user-role-tag {
+    font-size: 9.5px; font-family: 'JetBrains Mono', monospace; padding: 2px 6px; border-radius: 4px;
+    background: #C08A3E20; color: var(--gold); border: 1px solid #C08A3E40;
+  }
+  .user-role-tag.rep { background: #3E8E7E20; color: var(--teal); border-color: #3E8E7E40; }
+
+  .header-btn {
+    background: var(--panel); border: 1px solid var(--border); color: #C7CEE8;
+    padding: 6px 11px; border-radius: 8px; font-size: 11.5px; font-weight: 500; cursor: pointer;
+    display: flex; align-items: center; gap: 5px; transition: all 0.15s; position: relative;
+  }
+  .header-btn:hover { border-color: var(--gold); color: var(--text); transform: translateY(-1px); }
+
+  .req-badge {
+    position: absolute; top: -5px; right: -5px; background: var(--terracotta); color: #fff;
+    font-size: 9px; font-weight: 700; border-radius: 10px; padding: 1px 5px; animation: badge-pulse 2s infinite;
+  }
+
+  /* Progress & Activity Meter */
+  .activity-tracker {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 9px;
+    padding: 6px 12px; display: flex; align-items: center; gap: 10px;
+  }
+  .activity-bar { width: 70px; height: 6px; background: #1D2740; border-radius: 4px; overflow: hidden; }
+  .activity-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--green)); width: 0%; transition: width 0.4s ease; }
+  
+  /* Stats Display */
+  .stats { display: flex; gap: 12px; align-items: center; }
+  .stat { text-align: right; }
+  .stat .val { font-size: 16px; font-weight: 600; color: var(--gold); font-family: 'Fraunces', serif; }
+  .stat .lab { font-size: 8px; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .layout { display: grid; grid-template-columns: 310px 1fr; min-height: calc(100vh - 66px); }
+  .sidebar { border-right: 1px solid var(--border); padding: 18px; display: flex; flex-direction: column; gap: 16px; }
+  .section-title { font-size: 11px; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.6px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+  .field {
+    display: flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field input { background: transparent; border: none; outline: none; color: var(--text); font-size: 12.5px; width: 100%; font-family: inherit; }
+  .field:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px #C08A3E22; }
+  .field span { color: var(--muted2); font-size: 12px; }
+  textarea {
+    width: 100%; background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-size: 11.5px; padding: 8px; font-family: 'JetBrains Mono', monospace; resize: vertical; min-height: 55px;
+  }
+  button { font-family: inherit; cursor: pointer; border: none; border-radius: 8px; font-weight: 600; font-size: 12.5px; }
+  .btn-primary {
+    width: 100%; padding: 9px 13px; background: linear-gradient(135deg,#C08A3E,#9E6E2C); color: #17120A;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+  }
+  .btn-primary:disabled { background: #3A3020; cursor: default; }
+  .btn-secondary {
+    width: 100%; padding: 7px 11px; background: transparent; border: 1px solid var(--border); color: #C7CEE8;
+    display: flex; align-items: center; justify-content: center; gap: 7px; font-weight: 500; font-size: 11.5px;
+  }
+  .hint { font-size: 10px; color: var(--muted2); margin-top: 6px; line-height: 1.45; }
+
+  /* Source selector */
+  .source-picker { position: relative; margin-bottom: 8px; }
+  .source-trigger {
+    width: 100%; display: flex; align-items: center; justify-content: space-between; background: var(--panel);
+    border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; color: var(--text);
+    font-size: 12px; font-family: inherit; cursor: pointer; transition: border-color 0.2s;
+  }
+  .source-trigger:hover { border-color: #3A4770; }
+  .source-picker.open .source-trigger { border-color: var(--gold); }
+  .source-menu {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: var(--panel2);
+    border: 1px solid var(--border); border-radius: 10px; padding: 5px; z-index: 30;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.5); display: none; flex-direction: column; gap: 2px;
+  }
+  .source-picker.open .source-menu { display: flex; }
+  .source-opt {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 9px;
+    border-radius: 6px; cursor: pointer; font-size: 11.5px; color: var(--text); transition: background 0.15s;
+  }
+  .source-opt:hover { background: #1F2A47; }
+  .source-opt.selected { background: #C08A3E1A; color: var(--gold); font-weight: 600; }
+
+  .tag { font-size: 9px; font-family: 'JetBrains Mono', monospace; padding: 2px 5px; border-radius: 4px; white-space: nowrap; }
+  .tag.good { color: var(--teal); background: #3E8E7E1E; border: 1px solid #3E8E7E45; }
+  .tag.gold { color: var(--gold); background: #C08A3E1E; border: 1px solid #C08A3E45; }
+  .tag.violet { color: var(--violet); background: #8C7AE61E; border: 1px solid #8C7AE645; }
+  
+  .divider { border-top: 1px solid var(--border); padding-top: 12px; }
+  select.filter {
+    width: 100%; background: var(--panel); border: 1px solid var(--border); border-radius: 7px; padding: 6px 28px 6px 8px;
+    color: #C7CEE8; font-size: 11px; font-family: inherit; cursor: pointer; transition: border-color 0.2s;
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%238791A8' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 9px center; background-size: 8px;
+  }
+  select.filter:hover, select.filter:focus { border-color: #3A4770; outline: none; }
+  select.filter option { background: var(--panel2); color: var(--text); }
+
+  main { padding: 20px; position: relative; padding-bottom: 80px; }
+  .empty, .scanning { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; gap: 16px; text-align: center; }
+
+  .globe-wrap { position: relative; width: 160px; height: 160px; }
+  .globe-wrap svg { width: 100%; height: 100%; }
+  .globe-outline { fill: none; stroke: var(--border); stroke-width: 1; }
+  .globe-meridian { fill: none; stroke: #22304F; stroke-width: 1; }
+  .globe-rotate { animation: globe-spin 40s linear infinite; transform-origin: 100px 100px; }
+  @keyframes globe-spin { to { transform: rotate(360deg); } }
+  .pin { fill: var(--gold); opacity: 0; }
+  .pin.show { animation: pin-in 0.5s ease forwards; }
+  @keyframes pin-in { from { opacity: 0; r: 0; } to { opacity: 1; } }
+  .route-line { fill: none; stroke: var(--gold); stroke-width: 1; opacity: 0.55; stroke-dasharray: 4 3; }
+  .scanning .globe-rotate { animation-duration: 5s; }
+  .scanning .pin { animation: pin-pulse 1.2s ease-in-out infinite; }
+  @keyframes pin-pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px;
+    display: flex; flex-direction: column; gap: 8px; position: relative; overflow: hidden;
+    animation: rise 0.4s cubic-bezier(.2,.8,.2,1) both;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    border-color: #3A4770;
+  }
+  .card.selected { border-color: var(--gold); background: #162038; }
+  .card.starting-out { border-color: #C08A3E70; }
+  .card.starting-out:hover { border-color: var(--gold); }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .card-glow { position: absolute; top: 0; right: 0; width: 80px; height: 80px; pointer-events: none; }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; z-index: 1; }
+  .card-title { font-size: 15px; font-weight: 600; font-family: 'Fraunces', serif; }
+  .card-sub { font-size: 11px; color: var(--muted); margin-top: 2px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .age-badge { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted); background: #1D2740; border: 1px solid var(--border); border-radius: 4px; padding: 1px 4px; }
+  .tier-badge { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold); background: #C08A3E15; border: 1px solid #C08A3E40; border-radius: 4px; padding: 1px 4px; }
+  .src-badge { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--teal); background: #3E8E7E15; border: 1px solid #3E8E7E40; border-radius: 4px; padding: 1px 4px; }
+  
+  /* Custom High-Visibility Checkbox */
+  .lead-cb-wrap {
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; margin-right: 8px; flex-shrink: 0;
+  }
+  .lead-checkbox {
+    appearance: none; -webkit-appearance: none; width: 20px; height: 20px;
+    border: 2px solid #C08A3E; border-radius: 5px; background: #10162A;
+    cursor: pointer; position: relative; transition: all 0.15s; outline: none;
+  }
+  .lead-checkbox:hover { border-color: #E5A955; box-shadow: 0 0 8px rgba(192,138,62,0.4); }
+  .lead-checkbox:checked { background: var(--gold); border-color: var(--gold); }
+  .lead-checkbox:checked::after {
+    content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    color: #121008; font-size: 13px; font-weight: 900;
+  }
+
+  .del-btn { background: transparent; border: none; color: var(--muted2); padding: 4px; transition: color 0.15s, transform 0.15s; border-radius: 4px; }
+  .del-btn:hover { color: var(--terracotta); transform: scale(1.15); }
+  .score-row { display: flex; align-items: center; gap: 8px; z-index: 1; }
+  .score-bar { flex: 1; height: 5px; border-radius: 4px; background: #1D2740; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 0.9s cubic-bezier(.2,.8,.2,1); }
+  .badges { display: flex; flex-wrap: wrap; gap: 4px; z-index: 1; }
+  .badge { display: flex; align-items: center; gap: 4px; font-size: 9.5px; border-radius: 4px; padding: 2px 5px; font-family: 'JetBrains Mono', monospace; }
+  .badge.pulse { animation: badge-pulse 2s ease-in-out infinite; }
+  @keyframes badge-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+  .site-link { font-size: 11px; color: var(--teal); z-index: 1; word-break: break-all; text-decoration: none; font-family: 'JetBrains Mono', monospace; }
+  .site-link:hover { text-decoration: underline; }
+  
+  /* Multi-Channel Outreach Buttons Bar */
+  .outreach-bar {
+    display: flex; flex-wrap: wrap; gap: 5px; z-index: 1; background: #10162A;
+    border: 1px solid #202B48; border-radius: 7px; padding: 5px 6px;
+  }
+  .outreach-btn {
+    display: flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 500;
+    text-decoration: none; border-radius: 5px; padding: 3px 7px; border: 1px solid;
+    transition: all 0.15s; cursor: pointer;
+  }
+  .outreach-btn:hover { transform: translateY(-1px); filter: brightness(1.2); }
+  .outreach-btn.wa { color: #4FA57C; border-color: #4FA57C50; background: #4FA57C12; }
+  .outreach-btn.mail { color: #E06C75; border-color: #E06C7550; background: #E06C7512; }
+  .outreach-btn.ig { color: #C678DD; border-color: #C678DD50; background: #C678DD12; }
+  .outreach-btn.fb { color: #61AFEF; border-color: #61AFEF50; background: #61AFEF12; }
+  .outreach-btn.copy { color: #C7CEE8; border-color: #3A4770; background: transparent; }
+
+  /* Sequence Tabs */
+  .seq-tabs { display: flex; gap: 3px; background: #10162A; border: 1px solid #202B48; border-radius: 7px; padding: 2px; z-index: 1; }
+  .seq-tab {
+    flex: 1; padding: 3px 5px; font-size: 9.5px; font-family: 'JetBrains Mono', monospace; color: var(--muted);
+    background: transparent; border: none; border-radius: 5px; cursor: pointer; text-align: center; transition: all 0.15s;
+  }
+  .seq-tab.active { background: #1F2A48; color: var(--gold); font-weight: 600; }
+  .pitch-box {
+    font-size: 11px; color: #C4CAE4; background: #10162A; border: 1px solid #202B48; border-radius: 7px;
+    padding: 7px 8px; line-height: 1.45; z-index: 1; min-height: 44px;
+  }
+
+  .notes-field {
+    width: 100%; min-height: 32px; background: #10162A; border: 1px solid #202B48; border-radius: 6px;
+    color: var(--text); font-size: 10.5px; padding: 4px 6px; font-family: 'Inter', sans-serif; resize: vertical;
+    z-index: 1; transition: border-color 0.2s;
+  }
+  .notes-field:focus { outline: none; border-color: var(--gold); }
+  
+  .meta-row { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 6px; z-index: 1; }
+  .meta-field { display: flex; flex-direction: column; gap: 2px; }
+  .meta-field .lab { font-size: 8px; color: var(--muted2); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.4px; }
+  .date-input, .assign-input, .deal-input {
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 5px; color: var(--text);
+    font-size: 10px; padding: 3px 4px; font-family: 'JetBrains Mono', monospace; transition: border-color 0.2s;
+  }
+  .date-input:focus, .assign-input:focus, .deal-input:focus { outline: none; border-color: var(--gold); }
+  
+  .card-bottom { display: flex; justify-content: space-between; align-items: center; z-index: 1; margin-top: 2px; }
+  .status-select { font-size: 10px; border-radius: 6px; padding: 4px 6px; border: 1px solid; font-family: 'JetBrains Mono', monospace; }
+
+  /* Sticky Bulk Action Bar for Custom Selection */
+  .bulk-bar {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #141D34;
+    border: 1px solid var(--gold); border-radius: 12px; padding: 10px 18px; display: none;
+    align-items: center; gap: 14px; box-shadow: 0 16px 40px rgba(0,0,0,0.7); z-index: 150;
+    animation: rise 0.3s ease;
+  }
+  .bulk-bar.active { display: flex; }
+
+  /* Modals */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(8,12,22,0.85); backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    width: 100%; max-width: 660px; max-height: 85vh; display: flex; flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6); overflow: hidden;
+  }
+  .modal-head {
+    padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex;
+    justify-content: space-between; align-items: center;
+  }
+  .modal-body { padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+
+  /* Tab switcher inside modal */
+  .modal-tab-bar { display: flex; gap: 6px; background: #10162A; border-radius: 8px; padding: 4px; }
+  .modal-tab {
+    flex: 1; padding: 8px; border-radius: 6px; border: none; background: transparent; color: var(--muted);
+    font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; text-align: center;
+  }
+  .modal-tab.active { background: #1E2948; color: var(--gold); }
+
+  /* Request Item */
+  .req-card {
+    background: #18223C; border: 1px solid #C08A3E40; border-radius: 9px; padding: 11px 14px;
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  }
+  .req-title { font-weight: 600; font-size: 13px; color: var(--text); }
+  .req-sub { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+  /* Log items */
+  .log-item {
+    background: var(--panel2); border: 1px solid #202C4D; border-radius: 8px; padding: 9px 12px;
+    display: flex; flex-direction: column; gap: 4px; font-size: 11.5px;
+  }
+  .log-head { display: flex; justify-content: space-between; align-items: center; }
+  .log-user { font-weight: 600; color: var(--gold); }
+  .log-time { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--muted); }
+  .log-detail { color: #C7D0EA; line-height: 1.4; }
+
+  /* Team table */
+  .team-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+  .team-table th { text-align: left; padding: 8px 8px; color: var(--muted2); font-family: 'JetBrains Mono', monospace; font-size: 9.5px; border-bottom: 1px solid var(--border); }
+  .team-table td { padding: 9px 8px; border-bottom: 1px solid #1E2946; }
+
+  .toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--panel);
+    border: 1px solid var(--border); padding: 9px 16px; border-radius: 9px; font-size: 12.5px; z-index: 220;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4); max-width: 90vw; text-align: center;
+  }
+  ::-webkit-scrollbar { width: 7px; } ::-webkit-scrollbar-thumb { background: #26305A; border-radius: 7px; }
+</style>
+</head>
+<body>
+
+<!-- ======================= STRICT ACCESS GATE (For Logged Out / Guests) ======================= -->
+<div class="modal-overlay open" id="authGateModal" style="display:none;z-index:200;">
+  <div class="modal-box" style="max-width:390px;">
+    <div class="modal-head" style="justify-content:center;padding:18px;flex-direction:column;gap:8px;">
+      <!-- Clickable Radar Logo for Secret Admin PIN Access -->
+      <div onclick="handleSecretLogoClick()" title="LeadRadar Portal (Click 3x for Master PIN)" style="cursor:pointer;">
+        <svg class="logo-mark" viewBox="0 0 40 40" style="width:44px;height:44px;margin:0 auto;display:block;">
+          <circle cx="20" cy="20" r="17" fill="none" stroke="#C08A3E" stroke-width="2"/>
+          <ellipse cx="20" cy="20" rx="17" ry="7" fill="none" stroke="#C08A3E" stroke-width="1" opacity="0.6"/>
+          <line x1="3" y1="20" x2="37" y2="20" stroke="#C08A3E" stroke-width="1" opacity="0.6"/>
+          <circle cx="14" cy="15" r="1.8" fill="#B84A3D"/>
+          <circle cx="26" cy="24" r="1.8" fill="#B84A3D"/>
+        </svg>
+      </div>
+      <div style="text-align:center;">
+        <div class="display" style="font-size:18px;font-weight:600;color:var(--gold);">LeadRadar Pro</div>
+        <div style="font-size:9.5px;color:var(--muted);letter-spacing:0.5px;font-family:'JetBrains Mono',monospace;">AGENCY OUTREACH CRM</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tab-bar">
+        <button class="modal-tab active" id="tabGateLogin" onclick="switchGateTab('login')">🔐 Log In</button>
+        <button class="modal-tab" id="tabGateReq" onclick="switchGateTab('request')">📩 Request Access</button>
+      </div>
+
+      <!-- Section A: Universal Clean Login -->
+      <div id="gateLoginForm" style="display:flex;flex-direction:column;gap:12px;">
+        <div style="font-size:11.5px;color:var(--muted);">Apna registered Gmail ya Username aur PIN enter karein:</div>
+        
+        <div class="field" style="margin-bottom:0;">
+          <span>✉️</span>
+          <input id="gateLoginEmail" type="text" placeholder="Gmail or Username">
+        </div>
+
+        <div class="field" style="margin-bottom:0;">
+          <span>🔒</span>
+          <input id="gateLoginPin" type="password" placeholder="Password / PIN">
+        </div>
+
+        <button class="btn-primary" onclick="submitGateLogin()">🔐 Log In</button>
+        <div style="font-size:10px;color:var(--muted2);text-align:center;">Authorized agency members only.</div>
+      </div>
+
+      <!-- Section B: Request Access via Gmail -->
+      <div id="gateReqForm" style="display:none;flex-direction:column;gap:12px;">
+        <div style="font-size:11.5px;color:var(--muted);line-height:1.45;">
+          Naye employees apna Name aur Gmail submit karein. Admin approval ke baad aapka login activate ho jayega:
+        </div>
+
+        <div class="field" style="margin-bottom:0;">
+          <span>👤</span>
+          <input id="gateReqName" placeholder="Full Name (e.g. Hamza Tariq)">
+        </div>
+
+        <div class="field" style="margin-bottom:0;">
+          <span>✉️</span>
+          <input id="gateReqEmail" type="email" placeholder="Gmail Address (e.g. hamza@gmail.com)">
+        </div>
+
+        <button class="btn-primary" onclick="submitGateAccessRequest()">📩 Submit Access Request</button>
+        <div style="font-size:10.5px;color:var(--muted2);text-align:center;">Request Admin ko send ho jayegi.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="brand" onclick="handleSecretLogoClick()" title="LeadRadar Pro">
+    <svg class="logo-mark" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="17" fill="none" stroke="#C08A3E" stroke-width="2"/>
+      <ellipse cx="20" cy="20" rx="17" ry="7" fill="none" stroke="#C08A3E" stroke-width="1" opacity="0.6"/>
+      <line x1="3" y1="20" x2="37" y2="20" stroke="#C08A3E" stroke-width="1" opacity="0.6"/>
+      <circle cx="14" cy="15" r="1.8" fill="#B84A3D"/>
+      <circle cx="26" cy="24" r="1.8" fill="#B84A3D"/>
+    </svg>
+    <div>
+      <div class="display brand-name">LeadRadar Pro</div>
+      <div class="brand-sub" id="headerWorkspaceSub">AGENCY LEAD GENERATION & TEAM CRM</div>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <div class="user-badge">
+      <span>👤</span>
+      <span id="headerUserName" style="font-weight:600;">Guest</span>
+      <span id="headerUserRole" class="user-role-tag">REP</span>
+    </div>
+
+    <!-- Admin Only Buttons -->
+    <button class="header-btn admin-only" onclick="openAuditModal()">🕵️ Live Audit Feed</button>
+    <button class="header-btn admin-only" onclick="openTeamModal()">
+      👥 Team & Approvals
+      <span id="pendingReqBadge" class="req-badge" style="display:none;">0</span>
+    </button>
+
+    <!-- Rep Live Progress Meter -->
+    <div class="activity-tracker" id="repProgressTracker" style="display:none;">
+      <span style="font-size:11px;">📊</span>
+      <div>
+        <div style="font-size:10px;font-weight:600;display:flex;gap:4px;align-items:center;">
+          <span>Pitched:</span>
+          <span id="pitchedCount" style="color:var(--green);">0</span>/<span id="assignedCount">0</span>
+          <span style="color:var(--muted2);font-size:9px;">(<span id="remainingCount">0</span> rem)</span>
+        </div>
+        <div class="activity-bar"><div class="activity-fill" id="activityFill"></div></div>
+      </div>
+    </div>
+
+    <!-- Admin Live Allocation & Pool Counters -->
+    <div class="stats" id="adminStatsBar">
+      <div class="stat"><div class="val" id="statTotal">0</div><div class="lab">Total Pool</div></div>
+      <div class="stat"><div class="val" id="statAssigned" style="color:var(--teal)">0</div><div class="lab">Assigned</div></div>
+      <div class="stat"><div class="val" id="statUnassigned" style="color:var(--gold)">0</div><div class="lab">Unassigned</div></div>
+      <div class="stat"><div class="val" id="statContacted" style="color:var(--green)">0</div><div class="lab">Contacted</div></div>
+      <div class="stat"><div class="val" id="statPipeline" style="color:var(--violet)">$0</div><div class="lab">Pipeline</div></div>
+    </div>
+
+    <button class="header-btn" onclick="logoutUser()" title="Logout" style="color:var(--terracotta);border-color:#B84A3D40;">🚪 Logout</button>
+  </div>
+</header>
+
+<div class="layout">
+  <div class="sidebar">
+    <!-- Admin Only: Scan Leads -->
+    <div class="admin-only">
+      <div class="section-title" style="color:var(--gold);">1. Select Lead Engine</div>
+      <div class="source-picker" id="sourcePicker">
+        <button type="button" class="source-trigger" onclick="toggleSourceMenu()">
+          <span id="sourceLabel">▤ Meta Ads Library</span>
+          <span>▾</span>
+        </button>
+        <div class="source-menu" id="sourceMenu">
+          <div class="source-opt selected" data-value="meta" onclick="pickSource('meta','▤ Meta Ads Library','Active Advertisers')">
+            <span>▤ Meta Ads Library</span><span class="tag good">Active Ads</span>
+          </div>
+          <div class="source-opt" data-value="gmaps" onclick="pickSource('gmaps','📍 Google Maps Local','Local Reviews & Phone')">
+            <span>📍 Google Maps Local</span><span class="tag gold">Local Business</span>
+          </div>
+          <div class="source-opt" data-value="linktree" onclick="pickSource('linktree','🌲 Linktree Bio-Links','No-Website Sellers')">
+            <span>🌲 Linktree Bio-Links</span><span class="tag good">No-Website</span>
+          </div>
+          <div class="source-opt" data-value="ecommerce" onclick="pickSource('ecommerce','🛍️ Shopify & WooCommerce','Store Dorker')">
+            <span>🛍️ E-Commerce Dorker</span><span class="tag violet">Stores</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field"><span>◈</span><input id="niche" placeholder="Niche — e.g. jewelry, skincare, clinics"></div>
+      <div class="field"><span>◎</span><input id="country" placeholder="City / Country — e.g. Lahore, Dubai, Pakistan"></div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:11px;color:var(--muted);">
+        <span>Fetch Limit:</span>
+        <select id="leadLimit" style="background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:3px 7px;font-family:'JetBrains Mono',monospace;">
+          <option value="15">15 Leads</option>
+          <option value="25" selected>25 Leads</option>
+          <option value="40">40 Leads</option>
+          <option value="60">60 Leads</option>
+        </select>
+      </div>
+
+      <div style="display:flex;gap:7px;">
+        <button class="btn-primary" id="scanBtn" onclick="runScan()" style="flex:2;">⚡ Fetch Leads</button>
+        <button class="btn-secondary" id="refreshBtn" onclick="runScan()" style="flex:1;" title="Re-run scan">🔄</button>
+      </div>
+      <div class="hint" id="sourceHint">Meta Ads Library: Actively advertising brands ko scan karke deep-enrich karta hai.</div>
+    </div>
+
+    <!-- Search Leads (Available to All) -->
+    <div class="divider">
+      <div class="section-title" style="color:var(--gold);">Search Leads</div>
+      <div class="field"><span>🔎</span><input id="searchBox" placeholder="Business naam se search karein" oninput="render()"></div>
+    </div>
+
+    <!-- Rep Refresh Button -->
+    <div class="divider" id="repRefreshDivider" style="display:none;">
+      <button class="btn-secondary" onclick="fetchLeads()">🔄 Sync My Leads</button>
+    </div>
+
+    <!-- Admin Only: Manual Add -->
+    <div class="divider admin-only">
+      <div class="section-title" style="color:var(--teal);">Manual Add (Fallback)</div>
+      <textarea id="manualUrls" placeholder="Website URLs yahan paste karein — ek line pe ek"></textarea>
+      <button class="btn-secondary" style="margin-top:8px;" onclick="runManualAdd()">➕ Add & Deep Enrich</button>
+    </div>
+
+    <!-- Admin Only: Export -->
+    <div class="divider admin-only">
+      <div class="section-title" style="color:var(--muted);">Export Data</div>
+      <button class="btn-secondary" onclick="window.location.href='/api/export'">⬇ Export Full CSV</button>
+    </div>
+
+    <!-- Lead Filters -->
+    <div class="divider">
+      <div class="section-title" style="color:var(--muted);">Filters</div>
+      
+      <!-- Filter by Rep / Assignment -->
+      <select class="filter admin-only" id="filterRep" onchange="render()" style="margin-bottom:6px;">
+        <option value="all">👥 View: All Leads</option>
+        <option value="unassigned">⏳ View: Unassigned Only</option>
+      </select>
+
+      <select class="filter" id="filterStatus" onchange="render()">
+        <option value="all">All Statuses</option>
+        <option value="new">New (Uncontacted)</option>
+        <option value="contacted">Contacted</option>
+        <option value="replied">Replied (Hot 🔥)</option>
+        <option value="closed">Closed Deal 💰</option>
+      </select>
+
+      <div style="height:6px;"></div>
+      <select class="filter" id="sortBy" onchange="render()">
+        <option value="score">Sort: opportunity score</option>
+        <option value="recent">Sort: recently added</option>
+        <option value="name">Sort: name (A–Z)</option>
+      </select>
+    </div>
+  </div>
+
+  <main id="main"></main>
+</div>
+
+<!-- ======================= STICKY BULK ACTION BAR (Admin Custom Choice Assignment) ======================= -->
+<div class="bulk-bar" id="bulkBar">
+  <div style="font-weight:600;font-size:12.5px;color:var(--gold);display:flex;align-items:center;gap:6px;">
+    <span>✓</span>
+    <span id="selectedCountText">0 Leads Selected</span>
+  </div>
+  
+  <div style="display:flex;gap:6px;">
+    <button class="header-btn" style="font-size:10.5px;" onclick="selectUnassignedBatch(10)">+ Select 10 Unassigned</button>
+    <button class="header-btn" style="font-size:10.5px;" onclick="selectAllVisible()">Select All</button>
+    <button class="header-btn" style="font-size:10.5px;color:var(--terracotta);" onclick="clearSelection()">Clear</button>
+  </div>
+
+  <div style="display:flex;gap:6px;align-items:center;">
+    <select id="bulkAssignRepSelect" class="filter" style="width:140px;padding:5px 8px;font-size:11px;"></select>
+    <button class="btn-primary" style="padding:6px 14px;font-size:11px;" onclick="submitCustomSelectionAssign()">⚡ Assign Selected</button>
+  </div>
+</div>
+
+<!-- ======================= MODAL 2: Live Activity Audit Feed (Admin Only) ======================= -->
+<div class="modal-overlay" id="auditModal">
+  <div class="modal-box" style="max-width:700px;">
+    <div class="modal-head">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:16px;">🕵️</span>
+        <span style="font-weight:600;font-size:14px;">Live Team Audit & Anti-Cheat Feed</span>
+      </div>
+      <button class="del-btn" onclick="closeModal('auditModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;">
+        <select class="filter" id="auditRepFilter" onchange="loadAuditLogs()" style="max-width:200px;">
+          <option value="all">All Employees</option>
+        </select>
+        <button class="header-btn" onclick="loadAuditLogs()">🔄 Refresh Feed</button>
+      </div>
+      <div id="auditLogsContainer" style="display:flex;flex-direction:column;gap:8px;max-height:55vh;overflow-y:auto;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= MODAL 3: Team Management & Role Assignments (Admin Only) ======================= -->
+<div class="modal-overlay" id="teamModal">
+  <div class="modal-box" style="max-width:760px;">
+    <div class="modal-head">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:16px;">👥</span>
+        <span style="font-weight:600;font-size:14px;">Team Management, Roles & Approvals</span>
+      </div>
+      <button class="del-btn" onclick="closeModal('teamModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Section 1: Pending Approvals Queue -->
+      <div id="pendingSection" style="background:#161E34;border:1px solid var(--gold);border-radius:10px;padding:12px;display:none;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-weight:600;color:var(--gold);font-size:12.5px;">⏳ Pending Gmail Access Requests:</div>
+          <span id="pendingCountTag" class="tag gold">0 pending</span>
+        </div>
+        <div id="pendingCardsList" style="display:flex;flex-direction:column;gap:6px;"></div>
+      </div>
+
+      <!-- Section 2: Bulk Assign by Count -->
+      <div style="background:var(--panel2);border:1px solid #202C4D;border-radius:9px;padding:12px;">
+        <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--gold);">⚡ Quick Bulk Assign Unassigned Leads to Rep:</div>
+        <div style="display:flex;gap:8px;">
+          <select id="bulkRepSelect" class="filter" style="flex:2;"></select>
+          <select id="bulkCountSelect" class="filter" style="flex:1;">
+            <option value="10">10 Leads</option>
+            <option value="20" selected>20 Leads</option>
+            <option value="35">35 Leads</option>
+            <option value="50">50 Leads</option>
+          </select>
+          <button class="btn-primary" style="flex:1;" onclick="submitBulkAssign()">Assign</button>
+        </div>
+      </div>
+
+      <!-- Section 3: Active Team Members Table -->
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-top:4px;">Team Activity & Pipeline Scoreboard:</div>
+      <table class="team-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>PIN</th>
+            <th>Assigned</th>
+            <th>Pitched</th>
+            <th>Rem</th>
+            <th>Replied</th>
+            <th>Closed</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="teamTableBody"></tbody>
+      </table>
+
+      <!-- Section 4: Direct Invite Rep Form -->
+      <div style="border-top:1px solid var(--border);padding-top:10px;">
+        <div style="font-size:11.5px;font-weight:600;margin-bottom:6px;">Direct Invite New Member:</div>
+        <div style="display:flex;gap:8px;">
+          <input id="newRepName" class="assign-input" placeholder="Name (e.g. Hamza)" style="flex:2;">
+          <input id="newRepEmail" class="assign-input" placeholder="Gmail (e.g. hamza@gmail.com)" style="flex:2;">
+          <input id="newRepPin" class="assign-input" placeholder="PIN (e.g. 1234)" style="flex:1;">
+          <select id="newMemberRole" class="filter" style="flex:1;">
+            <option value="rep">Sales Rep</option>
+            <option value="admin">Admin</option>
+          </select>
+          <button class="btn-secondary" style="flex:1;" onclick="submitAddRep()">➕ Invite</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toastBox"></div>
+
+<script>
+const STATUS_META = {
+  new: { label: "New", color: "#C08A3E" },
+  contacted: { label: "Contacted", color: "#3E8E7E" },
+  replied: { label: "Replied 🔥", color: "#8C7AE6" },
+  closed: { label: "Closed 💰", color: "#4FA57C" },
+};
+
+const SOURCE_INFO = {
+  meta: "Meta Ads Library: Actively advertising brands ko scan karke deep-enrich karta hai.",
+  gmaps: "Google Maps: Local businesses (Clinics, Salons, Gyms, Restaurants) ke reviews, ratings aur direct verified numbers nikalta hai.",
+  linktree: "Linktree Dorker: Instagram/TikTok sellers jo WhatsApp par manual orders le rahe hain (Direct Shopify store build leads).",
+  ecommerce: "E-Commerce Dorker: Niche ke mutabiq live Shopify & WooCommerce stores dhoond kar unka tech audit karta hai."
+};
+
+let leads = [];
+let teamMembers = [];
+let currentUser = null; // null means guest/locked
+let scanning = false;
+let selectedSource = "meta";
+let cardSequenceTab = {};
+let selectedLeadIds = new Set();
+let secretLogoClicks = 0;
+
+function toast(text, ms = 3500) {
+  const box = document.getElementById("toastBox");
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.textContent = text;
+  box.appendChild(el);
+  setTimeout(() => el.remove(), ms);
+}
+
+function scoreColor(score) {
+  if (score >= 65) return "#B84A3D";
+  if (score >= 40) return "#C08A3E";
+  return "#3E8E7E";
+}
+
+function openModal(id) { document.getElementById(id).classList.add("open"); }
+function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+function switchGateTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById("tabGateLogin").classList.toggle("active", isLogin);
+  document.getElementById("tabGateReq").classList.toggle("active", !isLogin);
+  document.getElementById("gateLoginForm").style.display = isLogin ? "flex" : "none";
+  document.getElementById("gateReqForm").style.display = isLogin ? "none" : "flex";
+}
+
+function handleSecretLogoClick() {
+  secretLogoClicks++;
+  if (secretLogoClicks >= 3) {
+    secretLogoClicks = 0;
+    const pin = prompt("Admin Security PIN:");
+    if (pin) {
+      document.getElementById("gateLoginEmail").value = "Admin";
+      document.getElementById("gateLoginPin").value = pin;
+      submitGateLogin();
+    }
+  }
+}
+
+async function submitGateAccessRequest() {
+  const name = document.getElementById("gateReqName").value.trim();
+  const email = document.getElementById("gateReqEmail").value.trim();
+  if (!name || !email) { toast("Name aur Gmail dono zaroori hain"); return; }
+
+  const res = await fetch("/api/auth/request-access", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email })
+  });
+  const data = await res.json();
+  if (data.error) {
+    toast(data.error, 5000);
+  } else {
+    toast(data.message, 6000);
+    document.getElementById("gateReqName").value = "";
+    document.getElementById("gateReqEmail").value = "";
+    switchGateTab('login');
+  }
+}
+
+async function submitGateLogin() {
+  const email = document.getElementById("gateLoginEmail").value.trim();
+  const pin = document.getElementById("gateLoginPin").value.trim();
+  if (!email || !pin) { toast("Gmail / Username aur PIN dono enter karein"); return; }
+
+  const res = await fetch("/api/auth/login", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, pin })
+  });
+  const data = await res.json();
+  if (data.error) {
+    toast(data.error, 5000);
+  } else {
+    currentUser = data.user;
+    updateUserUi();
+    toast(`Welcome ${currentUser.name}!`);
+    if (currentUser.role === 'admin') await fetchTeam();
+    await fetchLeads();
+  }
+}
+
+async function logoutUser() {
+  await fetch("/api/auth/logout", { method: "POST" });
+  currentUser = null;
+  updateUserUi();
+}
+
+async function checkCurrentAuth() {
+  try {
+    const res = await fetch("/api/auth/current");
+    const user = await res.json();
+    currentUser = user;
+    updateUserUi();
+    if (currentUser) {
+      if (currentUser.role === 'admin') await fetchTeam();
+      await fetchLeads();
+      checkPendingRequests();
+    }
+  } catch (e) {
+    currentUser = null;
+    updateUserUi();
+  }
+}
+
+async function fetchTeam() {
+  try {
+    const res = await fetch("/api/team");
+    teamMembers = await res.json();
+    populateBulkRepDropdowns();
+    updateRepFilterOptions();
+  } catch(e) {}
+}
+
+function updateRepFilterOptions() {
+  const filterRep = document.getElementById("filterRep");
+  if (!filterRep) return;
+
+  const currentVal = filterRep.value;
+  const reps = teamMembers.filter(m => m.role !== 'admin');
+  
+  // Calculate counts per rep
+  const counts = {};
+  leads.forEach(l => {
+    if (l.assigned_to) {
+      const k = l.assigned_to.toLowerCase();
+      counts[k] = (counts[k] || 0) + 1;
+    }
+  });
+
+  const unassignedCount = leads.filter(l => !l.assigned_to).length;
+  const totalCount = leads.length;
+
+  filterRep.innerHTML = `
+    <option value="all">👥 View: All Leads (${totalCount})</option>
+    <option value="unassigned" ${currentVal==='unassigned'?'selected':''}>⏳ View: Unassigned Only (${unassignedCount})</option>
+    <option value="assigned" ${currentVal==='assigned'?'selected':''}>👤 View: All Assigned (${totalCount - unassignedCount})</option>
+    ${reps.map(r => `<option value="${r.name}" ${currentVal===r.name?'selected':''}>👤 ${r.name} (${counts[r.name.toLowerCase()] || 0})</option>`).join("")}
+  `;
+}
+
+function populateBulkRepDropdowns() {
+  const reps = teamMembers.filter(m => m.role !== 'admin');
+  const sel1 = document.getElementById("bulkRepSelect");
+  const sel2 = document.getElementById("bulkAssignRepSelect");
+  if (sel1) sel1.innerHTML = reps.map(m => `<option value="${m.name}">${m.name}</option>`).join("");
+  if (sel2) sel2.innerHTML = '<option value="">Unassigned (Clear)</option>' + reps.map(m => `<option value="${m.name}">${m.name}</option>`).join("");
+}
+
+function updateUserUi() {
+  const gateModal = document.getElementById("authGateModal");
+  if (!currentUser) {
+    gateModal.style.display = "flex";
+    document.getElementById("headerUserName").textContent = "Locked";
+    document.getElementById("headerUserRole").textContent = "GUEST";
+    document.querySelectorAll(".admin-only").forEach(el => el.style.display = "none");
+    document.getElementById("repRefreshDivider").style.display = "none";
+    render();
+    return;
+  }
+
+  gateModal.style.display = "none";
+  document.getElementById("headerUserName").textContent = currentUser.name;
+  const roleEl = document.getElementById("headerUserRole");
+  
+  if (currentUser.role === "admin") {
+    roleEl.textContent = "ADMIN 👑";
+    roleEl.className = "user-role-tag";
+    document.getElementById("headerWorkspaceSub").textContent = "AGENCY LEAD GENERATION & TEAM CRM (ADMIN)";
+    document.querySelectorAll(".admin-only").forEach(el => el.style.display = "");
+    document.getElementById("repRefreshDivider").style.display = "none";
+    document.getElementById("repProgressTracker").style.display = "none";
+    document.getElementById("adminStatsBar").style.display = "flex";
+  } else {
+    roleEl.textContent = "SALES REP 💼";
+    roleEl.className = "user-role-tag rep";
+    document.getElementById("headerWorkspaceSub").textContent = `REP WORKSPACE (${currentUser.name.toUpperCase()})`;
+    document.querySelectorAll(".admin-only").forEach(el => el.style.display = "none");
+    document.getElementById("repRefreshDivider").style.display = "block";
+    document.getElementById("repProgressTracker").style.display = "flex";
+    document.getElementById("adminStatsBar").style.display = "none";
+  }
+  render();
+}
+
+async function checkPendingRequests() {
+  if (!currentUser || currentUser.role !== "admin") return;
+  try {
+    const res = await fetch("/api/auth/pending-requests");
+    const pending = await res.json();
+    const badge = document.getElementById("pendingReqBadge");
+    if (pending.length > 0) {
+      badge.textContent = pending.length;
+      badge.style.display = "inline-block";
+    } else {
+      badge.style.display = "none";
+    }
+  } catch (e) {}
+}
+
+async function logRepAction(action_type, lead_id, lead_name, details) {
+  try {
+    await fetch("/api/activity-logs", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action_type, lead_id, lead_name, details })
+    });
+  } catch (e) {}
+}
+
+async function openAuditModal() {
+  openModal("auditModal");
+  await populateAuditRepFilter();
+  await loadAuditLogs();
+}
+
+async function populateAuditRepFilter() {
+  const res = await fetch("/api/team");
+  const team = await res.json();
+  const sel = document.getElementById("auditRepFilter");
+  sel.innerHTML = '<option value="all">All Employees</option>' + team.map(m => `<option value="${m.name}">${m.name} (${m.role})</option>`).join("");
+}
+
+async function loadAuditLogs() {
+  const userFilter = document.getElementById("auditRepFilter").value;
+  const res = await fetch(`/api/activity-logs?user=${encodeURIComponent(userFilter)}`);
+  const logs = await res.json();
+  const container = document.getElementById("auditLogsContainer");
+  
+  if (logs.length === 0) {
+    container.innerHTML = `<div style="color:var(--muted2);text-align:center;padding:20px;">Koi activity log nahi mila.</div>`;
+    return;
+  }
+
+  container.innerHTML = logs.map(lg => `
+    <div class="log-item">
+      <div class="log-head">
+        <span class="log-user">${lg.user_name} <span class="tag ${lg.role==='admin'?'gold':'good'}">${lg.role.toUpperCase()}</span></span>
+        <span class="log-time">${lg.timestamp}</span>
+      </div>
+      <div class="log-detail">
+        <strong>${lg.lead_name ? '[' + lg.lead_name + ']: ' : ''}</strong>${lg.details}
+      </div>
+    </div>
+  `).join("");
+}
+
+async function openTeamModal() {
+  openModal("teamModal");
+  await loadTeamTable();
+  await loadPendingApprovals();
+}
+
+async function loadPendingApprovals() {
+  const res = await fetch("/api/auth/pending-requests");
+  const pending = await res.json();
+  const section = document.getElementById("pendingSection");
+  const container = document.getElementById("pendingCardsList");
+  const tag = document.getElementById("pendingCountTag");
+
+  if (pending.length === 0) {
+    section.style.display = "none";
+    document.getElementById("pendingReqBadge").style.display = "none";
+    return;
+  }
+
+  section.style.display = "flex";
+  tag.textContent = `${pending.length} pending`;
+  document.getElementById("pendingReqBadge").textContent = pending.length;
+  document.getElementById("pendingReqBadge").style.display = "inline-block";
+
+  container.innerHTML = pending.map(req => `
+    <div class="req-card">
+      <div>
+        <div class="req-title">${req.name}</div>
+        <div class="req-sub">✉️ ${req.email} · 🕒 ${req.requested_at}</div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <input id="pin_${req.id}" class="assign-input" value="1234" style="width:65px;text-align:center;" title="Set Rep PIN">
+        <button class="btn-primary" style="padding:6px 11px;font-size:11px;" onclick="approveAccess('${req.id}','${req.name}','${req.email}')">✅ Approve</button>
+        <button class="del-btn" onclick="rejectAccess('${req.id}')" title="Reject Request">✕</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function approveAccess(reqId, name, email) {
+  const pinInput = document.getElementById(`pin_${reqId}`);
+  const pin = pinInput ? pinInput.value.trim() : "1234";
+
+  const res = await fetch("/api/auth/approve-request", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ request_id: reqId, pin })
+  });
+  const data = await res.json();
+
+  const inviteText = `Hi ${name}!\nYour LeadRadar Agency CRM access has been approved.\n\n🔗 Login Link: ${window.location.origin}\n✉️ Gmail: ${email}\n🔒 Access PIN: ${pin}\n\nYou can now log in and begin outreach!`;
+  navigator.clipboard.writeText(inviteText).catch(() => {});
+
+  alert(`✅ ${name} (${email}) has been approved!\n\n📋 Login Details have been COPIED to your clipboard to send via WhatsApp/Email:\n\nLink: ${window.location.origin}\nGmail: ${email}\nPIN: ${pin}`);
+  
+  await loadPendingApprovals();
+  await loadTeamTable();
+}
+
+async function rejectAccess(reqId) {
+  if (confirm("Is request ko reject karna chahte hain?")) {
+    await fetch("/api/auth/reject-request", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ request_id: reqId })
+    });
+    await loadPendingApprovals();
+  }
+}
+
+async function loadTeamTable() {
+  const res = await fetch("/api/team");
+  teamMembers = await res.json();
+  populateBulkRepDropdowns();
+  updateRepFilterOptions();
+  const tbody = document.getElementById("teamTableBody");
+
+  tbody.innerHTML = teamMembers.map(m => `
+    <tr>
+      <td style="font-weight:600;">${m.name}</td>
+      <td style="font-size:10.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;">${m.email || '—'}</td>
+      <td>
+        ${m.id !== 'admin' ? `
+        <select class="filter" style="font-size:10px;padding:2px 5px;" onchange="updateMemberRole('${m.id}', this.value)">
+          <option value="rep" ${m.role==='rep'?'selected':''}>Sales Rep</option>
+          <option value="admin" ${m.role==='admin'?'selected':''}>Admin</option>
+        </select>` : '<span class="tag gold">ADMIN 👑</span>'}
+      </td>
+      <td>
+        ${m.id !== 'admin' ? `
+        <input class="assign-input" value="${m.pin || ''}" style="width:55px;text-align:center;" onblur="updateMemberPin('${m.id}', this.value)" title="Change PIN">` : '******'}
+      </td>
+      <td style="font-weight:600;">${m.assigned_count || 0}</td>
+      <td style="color:var(--green);font-weight:600;">${m.contacted_count || 0}</td>
+      <td style="color:var(--muted);">${m.remaining_count || 0}</td>
+      <td style="color:var(--violet);">${m.replied_count || 0}</td>
+      <td style="color:var(--green);">${m.closed_count || 0}</td>
+      <td>
+        ${m.id !== 'admin' ? `
+        <div style="display:flex;gap:3px;">
+          <button class="header-btn" style="padding:2px 6px;font-size:9.5px;color:var(--gold);" onclick="reclaimLeadsFromRep('${m.name}')" title="Reclaim / Unassign all leads from this rep">🔒 Reclaim</button>
+          <button class="del-btn" onclick="deleteTeamMember('${m.id}')" title="Remove member">✕</button>
+        </div>` : '—'}
+      </td>
+    </tr>
+  `).join("");
+}
+
+async function updateMemberRole(id, role) {
+  await fetch(`/api/team/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ role }) });
+  toast("Role updated");
+  await loadTeamTable();
+}
+
+async function updateMemberPin(id, pin) {
+  if (!pin) return;
+  await fetch(`/api/team/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pin }) });
+  toast("PIN updated");
+}
+
+async function reclaimLeadsFromRep(repName) {
+  if (confirm(`Kya aap ${repName} ke saare leads wapis unassigned pool mein lana chahte hain?`)) {
+    const res = await fetch(`/api/team/${encodeURIComponent(repName)}/reclaim-leads`, { method: "POST" });
+    const data = await res.json();
+    toast(`${data.reclaimed_count} leads reclaimed successfully!`);
+    await loadTeamTable();
+    await fetchLeads();
+  }
+}
+
+async function submitAddRep() {
+  const name = document.getElementById("newRepName").value.trim();
+  const email = document.getElementById("newRepEmail").value.trim();
+  const pin = document.getElementById("newRepPin").value.trim() || "1234";
+  const role = document.getElementById("newMemberRole").value || "rep";
+  if (!name || !email) { toast("Name aur Gmail enter karein"); return; }
+
+  await fetch("/api/team", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, pin, role })
+  });
+
+  const inviteText = `Hi ${name}!\nYou have been invited to LeadRadar CRM.\n\n🔗 Login Link: ${window.location.origin}\n✉️ Gmail: ${email}\n🔒 PIN: ${pin}`;
+  navigator.clipboard.writeText(inviteText).catch(() => {});
+
+  alert(`✅ ${name} (${email}) has been invited!\n\n📋 Login Details have been COPIED to your clipboard!`);
+
+  document.getElementById("newRepName").value = "";
+  document.getElementById("newRepEmail").value = "";
+  document.getElementById("newRepPin").value = "";
+  await loadTeamTable();
+}
+
+async function deleteTeamMember(id) {
+  if (confirm("Is team member ko remove karna chahte hain?")) {
+    await fetch(`/api/team/${id}`, { method: "DELETE" });
+    await loadTeamTable();
+  }
+}
+
+/* Custom Choice Selection & Assignment Functions */
+function toggleLeadSelect(leadId) {
+  if (selectedLeadIds.has(leadId)) selectedLeadIds.delete(leadId);
+  else selectedLeadIds.add(leadId);
+  updateBulkBar();
+  const card = document.getElementById(`card-${leadId}`);
+  if (card) {
+    card.classList.toggle("selected", selectedLeadIds.has(leadId));
+    const cb = document.getElementById(`cb-${leadId}`);
+    if (cb) cb.checked = selectedLeadIds.has(leadId);
+  }
+}
+
+function selectAllVisible() {
+  const visibleCards = document.querySelectorAll(".card");
+  visibleCards.forEach(c => {
+    const id = c.id.replace("card-", "");
+    if (id) {
+      selectedLeadIds.add(id);
+      c.classList.add("selected");
+      const cb = document.getElementById(`cb-${id}`);
+      if (cb) cb.checked = true;
+    }
+  });
+  updateBulkBar();
+}
+
+function selectUnassignedBatch(count = 10) {
+  clearSelection();
+  const unassigned = leads.filter(l => !l.assigned_to).slice(0, count);
+  unassigned.forEach(l => {
+    selectedLeadIds.add(l.id);
+    const card = document.getElementById(`card-${l.id}`);
+    if (card) card.classList.add("selected");
+    const cb = document.getElementById(`cb-${l.id}`);
+    if (cb) cb.checked = true;
+  });
+  updateBulkBar();
+  toast(`${unassigned.length} unassigned leads select ho gaye!`);
+}
+
+function clearSelection() {
+  selectedLeadIds.clear();
+  document.querySelectorAll(".card.selected").forEach(c => c.classList.remove("selected"));
+  document.querySelectorAll(".lead-checkbox").forEach(cb => cb.checked = false);
+  updateBulkBar();
+}
+
+function updateBulkBar() {
+  const bar = document.getElementById("bulkBar");
+  const count = selectedLeadIds.size;
+  if (count > 0 && currentUser && currentUser.role === 'admin') {
+    bar.classList.add("active");
+    document.getElementById("selectedCountText").textContent = `${count} Leads Selected`;
+  } else {
+    bar.classList.remove("active");
+  }
+}
+
+async function submitCustomSelectionAssign() {
+  const repName = document.getElementById("bulkAssignRepSelect").value;
+  const leadIds = Array.from(selectedLeadIds);
+  if (leadIds.length === 0) { toast("Koi lead select nahi hai"); return; }
+
+  const res = await fetch("/api/leads/assign-selected", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ lead_ids: leadIds, rep_name: repName })
+  });
+  const data = await res.json();
+  toast(`${data.assigned_count} leads ${repName ? repName : 'Unassigned'} set ho gaye!`);
+  clearSelection();
+  await fetchLeads();
+  if (currentUser.role === 'admin') fetchTeam();
+}
+
+async function submitBulkAssign() {
+  const rep_name = document.getElementById("bulkRepSelect").value;
+  const count = parseInt(document.getElementById("bulkCountSelect").value);
+  if (!rep_name) { toast("Pehle koi rep select karein"); return; }
+
+  const res = await fetch("/api/leads/bulk-assign", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ rep_name, count })
+  });
+  const data = await res.json();
+  toast(`${data.assigned_count} leads ${rep_name} ko assign ho gaye!`);
+  await loadTeamTable();
+  await fetchLeads();
+}
+
+function toggleSourceMenu() {
+  document.getElementById("sourcePicker").classList.toggle("open");
+}
+
+function pickSource(val, label, tag) {
+  selectedSource = val;
+  document.getElementById("sourceLabel").textContent = label;
+  document.getElementById("sourcePicker").classList.remove("open");
+  document.querySelectorAll(".source-opt").forEach(el => el.classList.toggle("selected", el.dataset.value === val));
+  document.getElementById("sourceHint").textContent = SOURCE_INFO[val] || "";
+}
+
+document.addEventListener("click", (e) => {
+  const p = document.getElementById("sourcePicker");
+  if (p && !p.contains(e.target)) p.classList.remove("open");
+});
+
+function updateProgressTracker() {
+  const total = leads.length;
+  const assigned = leads.filter(l => Boolean(l.assigned_to)).length;
+  const unassigned = total - assigned;
+  const contacted = leads.filter(l => l.status !== "new").length;
+  const remaining = Math.max(0, total - contacted);
+  
+  // Admin stats
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statAssigned").textContent = assigned;
+  document.getElementById("statUnassigned").textContent = unassigned;
+  document.getElementById("statContacted").textContent = contacted;
+
+  // Rep stats
+  document.getElementById("pitchedCount").textContent = contacted;
+  document.getElementById("assignedCount").textContent = total;
+  document.getElementById("remainingCount").textContent = remaining;
+
+  const pct = total > 0 ? Math.min(100, Math.round((contacted / total) * 100)) : 0;
+  document.getElementById("activityFill").style.width = pct + "%";
+
+  // Calculate total pipeline value ($)
+  let totalPipeline = 0;
+  leads.forEach(l => {
+    const val = parseFloat((l.deal_value || "").replace(/[^0-9.]/g, "")) || 0;
+    totalPipeline += val;
+  });
+  document.getElementById("statPipeline").textContent = totalPipeline > 0 ? `$${totalPipeline.toLocaleString()}` : "$0";
+
+  updateRepFilterOptions();
+}
+
+function getSequenceText(lead, seq = "day1") {
+  const name = lead.business || "there";
+  const noWebsite = lead.has_website === false || !lead.website;
+  const src = lead.source || "meta";
+
+  // Hyper-personalized dynamic audit points
+  let specificPainPoint = "";
+  if (!noWebsite) {
+    if (lead.pagespeed >= 0 && lead.pagespeed < 50) {
+      specificPainPoint += `mobile speed is slow at ${lead.pagespeed}/100`;
+    }
+    if (!lead.pixel && lead.ads_active) {
+      specificPainPoint += (specificPainPoint ? " and " : "") + "Meta Pixel conversion tracking is missing on ads";
+    }
+  }
+
+  if (src === "gmaps") {
+    if (seq === "day1") {
+      if (noWebsite) {
+        return `Hi ${name} — noticed ${name} has great ratings (${lead.rating || 'top rated'}) on Google Maps, but no official website linked yet. Many local searchers call competitors when they can't view pricing/services online. Happy to show a quick modern mockup!`;
+      }
+      return `Hi ${name} — checked out ${name} on Google Maps (${lead.rating || 'top rated'}). Noticed your mobile website speed is ${lead.pagespeed}/100, which often loses mobile booking calls. Open to a 2-minute speed fix?`;
+    }
+    if (seq === "day3") {
+      return `Hey ${name} — following up! We build high-converting booking pages for local ${lead.niche || 'service'} businesses that turn Google searchers into direct appointments. Would you like to see a live demo?`;
+    }
+    return `Hi ${name} — wishing you massive growth with ${name}! Feel free to reach out anytime if you need help redesigning your website or boosting local SEO. 🙌`;
+  }
+
+  if (src === "linktree") {
+    if (seq === "day1") {
+      return `Hi ${name} — love your products on social media! Noticed you're managing customer orders manually via Linktree/WhatsApp. An automated Shopify store could save 10+ hours/week and double your checkout sales. Happy to share a quick preview!`;
+    }
+    if (seq === "day3") {
+      return `Hey ${name} — following up! We specialize in turning social D2C brands into automated e-commerce stores with Cash on Delivery & card checkout. Open to a 5-minute chat?`;
+    }
+    return `Hi ${name} — wishing you massive sales scaling ${name}! Let me know whenever you're ready to automate your checkout.`;
+  }
+
+  if (seq === "day1") {
+    if (noWebsite) {
+      return `Hi ${name} — noticed you're actively running paid ads on Meta but don't have a dedicated store website yet. A lot of that paid ad traffic drops off. Happy to share a mockup of a high-converting store for ${name}!`;
+    }
+    if (specificPainPoint) {
+      return `Hi ${name} — checked out your store and noticed ${specificPainPoint}. Since you're running ads, this usually loses buyers. Happy to send over a quick fix!`;
+    }
+    return `Hi ${name} — checked out ${name}, products look great! Had a few conversion optimization ideas that helped similar ${lead.niche || "ecommerce"} brands scale. Open to a quick look?`;
+  }
+
+  if (seq === "day3") {
+    return `Hey ${name} — following up on my previous note! We specialize in Shopify & WooCommerce speed optimization, tracking fixes, and UI redesigns. Would you be open to a 5-min chat this week?`;
+  }
+
+  return `Hi ${name} — assuming you're super busy scaling ${name}. If you ever need help redesigning your store or fixing ad conversion bottlenecks, feel free to reach out anytime! 🙌`;
+}
+
+async function fetchLeads() {
+  if (!currentUser) return;
+  try {
+    const res = await fetch("/api/leads");
+    leads = await res.json();
+    updateProgressTracker();
+    render();
+  } catch (e) {
+    console.error("Failed to fetch leads", e);
+  }
+}
+
+async function runScan() {
+  const niche = document.getElementById("niche").value.trim();
+  const country = document.getElementById("country").value.trim();
+  const limit = parseInt(document.getElementById("leadLimit").value || "25");
+  const source = selectedSource;
+  if (!niche || !country) { toast("Niche aur City / Country dono likhein"); return; }
+
+  scanning = true;
+  render();
+  document.getElementById("scanBtn").disabled = true;
+  document.getElementById("refreshBtn").disabled = true;
+  document.getElementById("scanBtn").textContent = "Fetching…";
+
+  try {
+    const res = await fetch("/api/scan", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ niche, city: country, limit, source, prefer_recent: false })
+    });
+    const data = await res.json();
+    if (data.error) {
+      toast("Notice: " + data.error, 5000);
+    } else {
+      toast(`${data.count} naye leads mile (${source.toUpperCase()})!`, 4000);
+    }
+  } catch (e) {
+    toast("Fetch error — server check karein", 5000);
+  }
+
+  scanning = false;
+  document.getElementById("scanBtn").disabled = false;
+  document.getElementById("refreshBtn").disabled = false;
+  document.getElementById("scanBtn").textContent = "⚡ Fetch Leads";
+  await fetchLeads();
+  if (currentUser.role === 'admin') fetchTeam();
+}
+
+async function runManualAdd() {
+  const raw = document.getElementById("manualUrls").value.trim();
+  if (!raw) { toast("Pehle kuch URLs paste karein"); return; }
+  const urls = raw.split("\n").map(u => u.trim()).filter(Boolean);
+  const niche = document.getElementById("niche").value.trim() || "manual";
+  const country = document.getElementById("country").value.trim() || "";
+
+  toast(`${urls.length} URLs deep enrich ho rahe hain…`, 2500);
+  const res = await fetch("/api/manual-add", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ urls, niche, city: country })
+  });
+  const data = await res.json();
+  toast(`${data.count} leads deep-enriched & add ho gaye!`, 3000);
+  document.getElementById("manualUrls").value = "";
+  await fetchLeads();
+}
+
+async function setStatus(id, status) {
+  await fetch(`/api/leads/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status }) });
+  await fetchLeads();
+}
+
+async function setNotes(id, value) {
+  await fetch(`/api/leads/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ notes: value }) });
+}
+
+async function setFollowUp(id, value) {
+  await fetch(`/api/leads/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ follow_up_date: value }) });
+  await fetchLeads();
+}
+
+async function setDealValue(id, value) {
+  await fetch(`/api/leads/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ deal_value: value }) });
+  updateProgressTracker();
+}
+
+async function setAssigned(id, value) {
+  await fetch(`/api/leads/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ assigned_to: value }) });
+  toast(`Lead assigned to ${value || 'Unassigned'}`);
+  await fetchLeads();
+  if (currentUser.role === 'admin') fetchTeam();
+}
+
+async function deleteLead(id) {
+  if (confirm("Is lead ko delete karna chahte hain?")) {
+    await fetch(`/api/leads/${id}`, { method: "DELETE" });
+    await fetchLeads();
+    if (currentUser.role === 'admin') fetchTeam();
+  }
+}
+
+async function skipBrand(name) {
+  const res = await fetch("/api/skip-brands", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name })
+  });
+  const data = await res.json();
+  toast(`"${name}" ab future scans mein skip hoga`, 3000);
+  await fetchLeads();
+}
+
+function switchSeqTab(leadId, tabKey) {
+  cardSequenceTab[leadId] = tabKey;
+  const lead = leads.find(l => l.id === leadId);
+  if (!lead) return;
+  
+  const cardEl = document.getElementById(`card-${leadId}`);
+  if (cardEl) {
+    cardEl.querySelectorAll(".seq-tab").forEach(t => {
+      t.classList.toggle("active", t.dataset.seq === tabKey);
+    });
+    const pitchText = getSequenceText(lead, tabKey);
+    const box = cardEl.querySelector(".pitch-box");
+    if (box) box.textContent = pitchText;
+    
+    // Update live links
+    const rawPhone = (lead.whatsapp || lead.phone || "").replace(/\D/g, "");
+    const waBtn = cardEl.querySelector(".outreach-btn.wa");
+    if (waBtn && rawPhone.length >= 8) {
+      waBtn.href = `https://wa.me/${rawPhone}?text=${encodeURIComponent(pitchText)}`;
+    }
+    const mailBtn = cardEl.querySelector(".outreach-btn.mail");
+    if (mailBtn && lead.email) {
+      mailBtn.href = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(lead.email)}&su=${encodeURIComponent(`Quick question regarding ${lead.business}`)}&body=${encodeURIComponent(pitchText)}`;
+    }
+  }
+}
+
+function handleOutreachClick(channel, leadId, businessName) {
+  const activeTab = cardSequenceTab[leadId] || "day1";
+  const lead = leads.find(l => l.id === leadId);
+  const text = getSequenceText(lead, activeTab);
+
+  if (channel === 'instagram') {
+    navigator.clipboard.writeText(text).catch(() => {});
+    toast(`📸 Pitch copied! Opening Instagram for ${businessName}`);
+    logRepAction("instagram_dm_click", leadId, businessName, `Opened Instagram DM (${activeTab.toUpperCase()} Pitch copied)`);
+  } else if (channel === 'messenger') {
+    navigator.clipboard.writeText(text).catch(() => {});
+    toast(`💬 Pitch copied! Opening Messenger for ${businessName}`);
+    logRepAction("messenger_click", leadId, businessName, `Opened Messenger (${activeTab.toUpperCase()} Pitch copied)`);
+  } else if (channel === 'email') {
+    logRepAction("email_click", leadId, businessName, `Opened Gmail Composer (${activeTab.toUpperCase()} Pitch)`);
+  } else if (channel === 'whatsapp') {
+    logRepAction("whatsapp_click", leadId, businessName, `Opened WhatsApp Chat (${activeTab.toUpperCase()} Pitch)`);
+  }
+}
+
+function copyPitch(id) {
+  const lead = leads.find(l => l.id === id);
+  const activeTab = cardSequenceTab[id] || "day1";
+  const text = getSequenceText(lead, activeTab);
+  navigator.clipboard.writeText(text).then(() => {
+    toast(`${activeTab.toUpperCase()} pitch copy ho gaya!`);
+    logRepAction("pitch_copy", id, lead.business, `Copied ${activeTab.toUpperCase()} Pitch Message`);
+  });
+}
+
+function globeSvg(pulsing) {
+  return `
+    <svg viewBox="0 0 200 200">
+      <g class="globe-rotate">
+        <circle class="globe-outline" cx="100" cy="100" r="78"/>
+        <ellipse class="globe-meridian" cx="100" cy="100" rx="78" ry="30"/>
+        <ellipse class="globe-meridian" cx="100" cy="100" rx="50" ry="78"/>
+        <line class="globe-meridian" x1="22" y1="100" x2="178" y2="100"/>
+        <path class="route-line" d="M 55 70 Q 100 35 140 85"/>
+        <path class="route-line" d="M 65 135 Q 110 150 135 110"/>
+        <circle class="pin ${pulsing?'show':''}" cx="55" cy="70" r="3.5"/>
+        <circle class="pin ${pulsing?'show':''}" cx="140" cy="85" r="3.5" style="animation-delay:0.3s"/>
+        <circle class="pin ${pulsing?'show':''}" cx="65" cy="135" r="3.5" style="animation-delay:0.6s"/>
+        <circle class="pin ${pulsing?'show':''}" cx="135" cy="110" r="3.5" style="animation-delay:0.9s"/>
+      </g>
+    </svg>`;
+}
+
+function render() {
+  const main = document.getElementById("main");
+  if (!currentUser) {
+    main.innerHTML = `
+      <div class="empty">
+        <div class="globe-wrap idle">${globeSvg(false)}</div>
+        <div class="display" style="font-size:18px;color:var(--muted);">Please log in to view your leads.</div>
+      </div>`;
+    return;
+  }
+
+  const total = leads.length;
+  updateProgressTracker();
+
+  if (scanning) {
+    main.innerHTML = `
+      <div class="scanning">
+        <div class="globe-wrap">${globeSvg(true)}</div>
+        <div class="mono" style="color:var(--gold);font-size:13px;">Extracting leads & deep-scraping contact data (${selectedSource.toUpperCase()})…</div>
+      </div>`;
+    return;
+  }
+
+  if (total === 0) {
+    main.innerHTML = `
+      <div class="empty">
+        <div class="globe-wrap idle">${globeSvg(false)}</div>
+        <div>
+          <div class="display" style="font-size:17px;font-weight:600;margin-bottom:5px;">
+            ${currentUser.role === 'admin' ? 'Koi leads abhi tak nahi hain' : 'Aapko abhi tak koi lead assign nahi hua'}
+          </div>
+          <div style="font-size:12px;color:var(--muted);max-width:320px;line-height:1.5;">
+            ${currentUser.role === 'admin' ? 'Lead engine select karein aur niche/city daal kar search karein.' : 'Admin se rabta karein taake wo aapko leads assign karein.'}
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const filterStatus = document.getElementById("filterStatus").value;
+  const filterRepEl = document.getElementById("filterRep");
+  const filterRep = filterRepEl ? filterRepEl.value : "all";
+  const sortBy = document.getElementById("sortBy").value;
+  const searchText = document.getElementById("searchBox").value.trim().toLowerCase();
+
+  let filtered = leads.filter(l => {
+    if (filterStatus !== "all" && l.status !== filterStatus) return false;
+    
+    // Rep Filter
+    if (filterRep === "unassigned" && Boolean(l.assigned_to)) return false;
+    if (filterRep === "assigned" && !Boolean(l.assigned_to)) return false;
+    if (filterRep !== "all" && filterRep !== "unassigned" && filterRep !== "assigned") {
+      if ((l.assigned_to || "").toLowerCase() !== filterRep.toLowerCase()) return false;
+    }
+
+    if (searchText && !(l.business && l.business.toLowerCase().includes(searchText))) return false;
+    return true;
+  });
+
+  if (sortBy === "score") filtered.sort((a, b) => b.score - a.score);
+  else if (sortBy === "recent") filtered.sort((a, b) => (b.added_at || 0) - (a.added_at || 0));
+  else filtered.sort((a, b) => (a.business || "").localeCompare(b.business || ""));
+
+  if (filtered.length === 0) {
+    main.innerHTML = `<div style="color:var(--muted2);font-size:13.5px;margin-top:40px;text-align:center;">Is filter pe koi lead nahi mila.</div>`;
+    return;
+  }
+
+  main.innerHTML = `<div class="grid">${filtered.map((l, i) => cardHtml(l, i)).join("")}</div>`;
+  requestAnimationFrame(() => {
+    document.querySelectorAll(".score-fill").forEach(el => {
+      const target = el.dataset.target;
+      requestAnimationFrame(() => { el.style.width = target + "%"; });
+    });
+  });
+}
+
+function cardHtml(lead, index) {
+  const sc = scoreColor(lead.score);
+  const st = STATUS_META[lead.status] || STATUS_META.new;
+  const noWebsite = lead.has_website === false || !lead.website;
+  const isStarting = noWebsite || (lead.followers !== null && lead.followers !== undefined && lead.followers < 3000);
+  const activeTab = cardSequenceTab[lead.id] || "day1";
+  const src = lead.source || "meta";
+  const isAdmin = currentUser && currentUser.role === "admin";
+  const isSelected = selectedLeadIds.has(lead.id);
+
+  const badges = [];
+  if (src === "gmaps") {
+    badges.push(`<span class="badge" style="color:var(--gold);background:#C08A3E18;border:1px solid #C08A3E40;">📍 ${lead.rating || 'Google Maps'}</span>`);
+  } else if (src === "linktree") {
+    badges.push(`<span class="badge" style="color:var(--green);background:#4FA57C18;border:1px solid #4FA57C40;">🌲 Linktree Seller</span>`);
+  }
+
+  if (noWebsite) {
+    badges.push(`<span class="badge pulse" style="color:var(--gold);background:#C08A3E22;border:1px solid #C08A3E55;">🌱 no website</span>`);
+  } else {
+    badges.push(`<span class="badge" style="color:var(--muted);background:#8791A818;border:1px solid #8791A840;">◆ ${lead.tech || "Custom"}</span>`);
+  }
+  if (lead.ads_active) badges.push(`<span class="badge" style="color:var(--teal);background:#3E8E7E18;border:1px solid #3E8E7E40;">◈ running ads</span>`);
+  if (!noWebsite && lead.pagespeed >= 0 && lead.pagespeed < 50) badges.push(`<span class="badge" style="color:var(--terracotta);background:#B84A3D18;border:1px solid #B84A3D40;">▲ speed ${lead.pagespeed}</span>`);
+  if (!noWebsite && !lead.pixel) badges.push(`<span class="badge" style="color:var(--terracotta);background:#B84A3D18;border:1px solid #B84A3D40;">▼ no pixel</span>`);
+
+  const rawPhone = (lead.whatsapp || lead.phone || "").replace(/\D/g, "");
+  const waNumber = rawPhone.length >= 8 ? rawPhone : "";
+  const currentPitch = getSequenceText(lead, activeTab);
+  const waLink = waNumber ? `https://wa.me/${waNumber}?text=${encodeURIComponent(currentPitch)}` : "";
+  const mailLink = lead.email ? `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(lead.email)}&su=${encodeURIComponent(`Quick question regarding ${lead.business}`)}&body=${encodeURIComponent(currentPitch)}` : "";
+  const igLink = lead.instagram ? `https://instagram.com/${lead.instagram.replace('@','')}` : "";
+  const fbLink = lead.facebook_page ? lead.facebook_page : "";
+
+  // Dynamic set of all rep names ensuring lead.assigned_to is always present in dropdown
+  const repNameSet = new Set(teamMembers.filter(m => m.role !== 'admin').map(m => m.name));
+  if (lead.assigned_to) repNameSet.add(lead.assigned_to);
+  const repOptions = Array.from(repNameSet).map(rName => 
+    `<option value="${rName}" ${(lead.assigned_to||'').toLowerCase()===rName.toLowerCase()?'selected':''}>${rName}</option>`
+  ).join("");
+
+  return `
+    <div class="card ${isStarting ? 'starting-out' : ''} ${isSelected ? 'selected' : ''}" id="card-${lead.id}" style="animation-delay:${Math.min(index,10)*0.03}s;">
+      <div class="card-glow" style="background:radial-gradient(circle, ${sc}22, transparent 70%);"></div>
+      <div class="card-top">
+        <div style="display:flex;align-items:flex-start;">
+          ${isAdmin ? `
+          <label class="lead-cb-wrap" title="Select Lead">
+            <input type="checkbox" id="cb-${lead.id}" class="lead-checkbox" ${isSelected?'checked':''} onchange="toggleLeadSelect('${lead.id}')">
+          </label>` : ''}
+          <div>
+            <div class="card-title">${lead.business || "Business"}</div>
+            <div class="card-sub">
+              <span>${lead.niche || "—"} · ${lead.city || "—"}</span>
+              <span class="src-badge">${src.toUpperCase()}</span>
+              ${lead.tier ? `<span class="tier-badge">${lead.tier}</span>` : ""}
+            </div>
+          </div>
+        </div>
+        ${isAdmin ? `
+        <div style="display:flex;gap:2px;">
+          <button class="del-btn" onclick="skipBrand('${(lead.business || "").replace(/'/g, "\\'")}')" title="Skip Brand in Scans">🚫</button>
+          <button class="del-btn" onclick="deleteLead('${lead.id}')" title="Delete Lead">✕</button>
+        </div>` : ''}
+      </div>
+      <div class="score-row">
+        <div class="score-bar"><div class="score-fill" data-target="${lead.score}" style="background:${sc};"></div></div>
+        <span class="mono" style="font-size:11px;color:${sc};font-weight:600;">${lead.score}</span>
+      </div>
+      <div class="badges">${badges.join("")}</div>
+      ${lead.website ? `<a class="site-link" href="${lead.website}" target="_blank">🔗 ${lead.website}</a>` : `<div class="site-link" style="color:var(--muted2);">No official website — direct social/local seller</div>`}
+      
+      <!-- Multi-Channel Outreach Buttons Bar -->
+      <div class="outreach-bar">
+        ${waLink ? `<a class="outreach-btn wa" href="${waLink}" target="_blank" onclick="handleOutreachClick('whatsapp','${lead.id}','${(lead.business||'').replace(/'/g,"\\'")}')">💬 WhatsApp</a>` : ''}
+        ${lead.email ? `<a class="outreach-btn mail" href="${mailLink}" target="_blank" onclick="handleOutreachClick('email','${lead.id}','${(lead.business||'').replace(/'/g,"\\'")}')">✉️ Gmail</a>` : ''}
+        ${igLink ? `<a class="outreach-btn ig" href="${igLink}" target="_blank" onclick="handleOutreachClick('instagram','${lead.id}','${(lead.business||'').replace(/'/g,"\\'")}')">📸 IG DM</a>` : ''}
+        ${fbLink ? `<a class="outreach-btn fb" href="${fbLink}" target="_blank" onclick="handleOutreachClick('messenger','${lead.id}','${(lead.business||'').replace(/'/g,"\\'")}')">🌐 Messenger</a>` : ''}
+        <button class="outreach-btn copy" onclick="copyPitch('${lead.id}')">📋 Copy</button>
+      </div>
+
+      <!-- Sequence Tabs -->
+      <div class="seq-tabs">
+        <button class="seq-tab ${activeTab==='day1'?'active':''}" data-seq="day1" onclick="switchSeqTab('${lead.id}','day1')">Day 1 Pitch</button>
+        <button class="seq-tab ${activeTab==='day3'?'active':''}" data-seq="day3" onclick="switchSeqTab('${lead.id}','day3')">Day 3 Followup</button>
+        <button class="seq-tab ${activeTab==='day5'?'active':''}" data-seq="day5" onclick="switchSeqTab('${lead.id}','day5')">Day 5 Breakup</button>
+      </div>
+      <div class="pitch-box">${currentPitch}</div>
+
+      <textarea class="notes-field" placeholder="Outreach notes / call summary…" onblur="setNotes('${lead.id}', this.value)">${lead.notes || ""}</textarea>
+      
+      <div class="meta-row">
+        <div class="meta-field">
+          <span class="lab">FOLLOW-UP</span>
+          <input type="date" class="date-input" value="${lead.follow_up_date || ''}" onchange="setFollowUp('${lead.id}', this.value)">
+        </div>
+        <div class="meta-field">
+          <span class="lab">DEAL VALUE</span>
+          <input type="text" class="deal-input" placeholder="$500" value="${lead.deal_value || ''}" onblur="setDealValue('${lead.id}', this.value)">
+        </div>
+        <div class="meta-field">
+          <span class="lab">ASSIGNED TO</span>
+          ${isAdmin ? `
+          <select class="assign-input" onchange="setAssigned('${lead.id}', this.value)">
+            <option value="">Unassigned</option>
+            ${repOptions}
+          </select>` : `
+          <input type="text" class="assign-input" value="${lead.assigned_to || 'Unassigned'}" readonly>`}
+        </div>
+      </div>
+
+      <div class="card-bottom">
+        <select class="status-select" style="color:${st.color};border-color:${st.color}55;background:${st.color}18;" onchange="setStatus('${lead.id}', this.value)">
+          ${Object.entries(STATUS_META).map(([k,v]) => `<option value="${k}" ${lead.status===k?"selected":""}>${v.label}</option>`).join("")}
+        </select>
+        ${lead.assigned_to ? 
+          `<span class="badge" style="color:var(--teal);background:#3E8E7E22;border:1px solid #3E8E7E55;font-weight:600;">👤 Assigned: ${lead.assigned_to}</span>` : 
+          `<span class="badge" style="color:var(--gold);background:#C08A3E18;border:1px solid #C08A3E45;font-weight:600;">⏳ Unassigned</span>`
+        }
+      </div>
+    </div>`;
+}
+
+checkCurrentAuth();
+</script>
+</body>
+</html>
